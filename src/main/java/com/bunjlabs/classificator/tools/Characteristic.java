@@ -1,4 +1,4 @@
-package com.bunjlabs.classificator.db;
+package com.bunjlabs.classificator.tools;
 
 import java.util.List;
 
@@ -90,6 +90,25 @@ public class Characteristic {
             throw new ClassCastException("Characteristic type is not NUMBER_RANGE");
         }
         return numberTo;
+    }
+    
+    @Override
+    public String toString() {
+        switch (type) {
+            case NAME:
+                return this.name;
+            case NAME_SET:
+                String str = "|";
+                for (String el : this.nameSet) {
+                    str += el + "|";
+                }
+                return str;
+            case NUMBER:
+                return "" + this.numberFrom;
+            case NUMBER_RANGE:
+                return "" + this.numberFrom + "-" + this.numberTo;
+        }
+        return "";
     }
 
 }

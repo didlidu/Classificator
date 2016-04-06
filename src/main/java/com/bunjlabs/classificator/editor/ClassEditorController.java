@@ -1,9 +1,11 @@
 package com.bunjlabs.classificator.editor;
 
 import com.bunjlabs.classificator.MainController;
-import com.bunjlabs.classificator.db.Characteristic;
+import com.bunjlabs.classificator.tools.Characteristic;
 import com.bunjlabs.classificator.db.ClassDAO;
 import com.bunjlabs.classificator.db.Database;
+import com.bunjlabs.classificator.tools.PossibleCharacteristics;
+import com.bunjlabs.classificator.tools.WindowBuilder;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.ListView;
@@ -41,28 +44,45 @@ public class ClassEditorController implements Initializable {
 
     private String editingClass = "";
     private boolean isEditing = false;
-    
+
     public MainController mainController;
 
     public void setEditingClass(String className) {
         this.editingClass = className;
         this.isEditing = true;
         classNameField.setText(editingClass);
+        classNameField.setEditable(false);
+        ClassDAO classDAO = Database.getInstance().findByName(className);
+        for (Map.Entry<String, Characteristic> entry : classDAO.getCharacteristics().entrySet()) {
+            Characteristic.Type type = entry.getValue().getType();
+            Control control = addPaneToAccordion(type, entry.getKey());
+            switch (type) {
+                case NAME:
+                    ((ChoiceBox<String>) control).getSelectionModel().select(
+                            entry.getValue().getName()
+                    );
+                    break;
+                case NAME_SET:
+                    for (String el : entry.getValue().getNameSet()) {
+                        ((CheckComboBox<String>) control).getCheckModel().check(el);
+                    }
+                    break;
+                case NUMBER:
+                    ((TextField) control).setText("" + entry.getValue().getNumber());
+                    break;
+                case NUMBER_RANGE:
+                    ((TextField) control).setText(
+                            "" + entry.getValue().getNumberFrom() + "-" + entry.getValue().getNumberTo()
+                    );
+                    break;
+            }
+        }
     }
 
-    private List<CharacteristicField> characteristicsFields = new ArrayList<>();
+    private List<PossibleCharacteristics.CharacteristicField> characteristicsFields = new ArrayList<>();
 
-    private Map<String, Characteristic.Range> characteristicsRange = new HashMap<>();
-    private Map<String, Characteristic.Type> characteristicsType = new HashMap<>();
-
-    {
-        List<String> list = Arrays.asList("a", "b", "c");
-
-        characteristicsType.put("param a", Characteristic.Type.NAME_SET);
-        characteristicsRange.put("param a", new Characteristic.Range(list));
-        characteristicsType.put("param b", Characteristic.Type.NUMBER_RANGE);
-        characteristicsRange.put("param b", new Characteristic.Range(0, 100));
-    }
+    private Map<String, Characteristic.Range> characteristicsRange = PossibleCharacteristics.getCharacteristicsRange();
+    private Map<String, Characteristic.Type> characteristicsType = PossibleCharacteristics.getCharacteristicsType();
 
     private ObservableList<String> characteristicsData
             = FXCollections.observableArrayList(characteristicsType.keySet());
@@ -73,14 +93,7 @@ public class ClassEditorController implements Initializable {
         characteristicsChoiseBox.setTooltip(new Tooltip("Select characteristic"));
     }
 
-    @FXML
-    public void handleAddButtonAction(ActionEvent event) {
-        String characteristicName = (String) characteristicsChoiseBox.getSelectionModel().getSelectedItem();
-        if (characteristicName == null) {
-            return;
-        }
-        Characteristic.Type type = characteristicsType.get(characteristicName);
-        characteristicsData.remove(characteristicName);
+    private Control addPaneToAccordion(Characteristic.Type type, String characteristicName) {
         TitledPane gridTitlePane = new TitledPane();
         GridPane grid = new GridPane();
         grid.setVgap(4);
@@ -107,10 +120,22 @@ public class ClassEditorController implements Initializable {
                 grid.add(control, 0, 0);
                 break;
         }
-        characteristicsFields.add(new CharacteristicField(control, characteristicName));
+        characteristicsFields.add(new PossibleCharacteristics.CharacteristicField(control, characteristicName));
         gridTitlePane.setText(characteristicName);
         gridTitlePane.setContent(grid);
         accordion.getPanes().add(gridTitlePane);
+        return control;
+    }
+
+    @FXML
+    public void handleAddButtonAction(ActionEvent event) {
+        String characteristicName = (String) characteristicsChoiseBox.getSelectionModel().getSelectedItem();
+        if (characteristicName == null) {
+            return;
+        }
+        Characteristic.Type type = characteristicsType.get(characteristicName);
+        characteristicsData.remove(characteristicName);
+        addPaneToAccordion(type, characteristicName);
     }
 
     @FXML
@@ -123,19 +148,23 @@ public class ClassEditorController implements Initializable {
     public void handleSaveButtonAction(ActionEvent event) {
         String className = classNameField.getText();
         if (className.isEmpty()) {
-            //TODO error
+            WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "Class name is empty");
+            return;
+        }
+        if (characteristicsFields.isEmpty()) {
+            WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "Cannot save instance with no parameters");
             return;
         }
         Map<String, Characteristic> map = new HashMap<>();
         ClassDAO classDAO = new ClassDAO(className, map);
-        for (CharacteristicField field : characteristicsFields) {
+        for (PossibleCharacteristics.CharacteristicField field : characteristicsFields) {
             Characteristic.Type type = characteristicsType.get(field.name);
             Characteristic.Range range = characteristicsRange.get(field.name);
             switch (type) {
                 case NAME:
                     String selected = (String) ((ChoiceBox<String>) field.control).getSelectionModel().getSelectedItem();
                     if (selected == null) {
-                        //TODO error
+                        WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "ChoiseBox item is not selected");
                         return;
                     }
                     map.put(field.name, new Characteristic(selected));
@@ -143,7 +172,7 @@ public class ClassEditorController implements Initializable {
                 case NAME_SET:
                     List<String> checked = ((CheckComboBox<String>) field.control).getCheckModel().getCheckedItems();
                     if (checked == null || checked.isEmpty()) {
-                        //TODO error
+                        WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "CheckComboBox item is not selected");
                         return;
                     }
                     map.put(field.name, new Characteristic(checked));
@@ -153,7 +182,7 @@ public class ClassEditorController implements Initializable {
                     try {
                         number = Double.parseDouble(((TextField) field.control).getText());
                     } catch (NumberFormatException ex) {
-                        //TODO error
+                        WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "Not a number in TextField");
                         return;
                     }
                     map.put(field.name, new Characteristic(number));
@@ -166,29 +195,20 @@ public class ClassEditorController implements Initializable {
                                 Double.parseDouble(numbers[1])
                         ));
                     } catch (NumberFormatException ex) {
-                        //TODO error
+                        WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "Not a range in TextField");
                         return;
                     }
                     break;
             }
         }
         classDAO.flush();
-        mainController.data.add(new ClassRow(className, map.toString()));
-        //mainController.refreshTable();
+        mainController.addToTable(new ClassRow(className, map.toString()));
+        if (this.isEditing) mainController.refreshTable();
         Database.getInstance().flush();
         Stage stage = (Stage) characteristicsChoiseBox.getScene().getWindow();
         stage.close();
     }
 
-    private static class CharacteristicField {
 
-        public Control control;
-        public String name;
-
-        public CharacteristicField(Control control, String name) {
-            this.control = control;
-            this.name = name;
-        }
-    }
 
 }

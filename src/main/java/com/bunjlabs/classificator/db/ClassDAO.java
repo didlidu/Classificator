@@ -1,5 +1,6 @@
 package com.bunjlabs.classificator.db;
 
+import com.bunjlabs.classificator.tools.Characteristic;
 import java.util.HashMap;
 import java.util.Map;
 
