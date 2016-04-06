@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="387.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/8" 
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bunjlabs.classificator.editor.ClassEditorController">
+   <children>
+      <Button onAction="#handleSaveButtonAction" layoutX="140.0" layoutY="349.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Save" />
+      <Button onAction="#handleCancelButtonAction" layoutX="235.0" layoutY="349.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Cancel" />
+      <TextField fx:id="classNameField" layoutX="112.0" layoutY="32.0" prefHeight="25.0" prefWidth="321.0" />
+      <Label layoutX="20.0" layoutY="37.0" text="Class name" />
+      <ChoiceBox fx:id="characteristicsChoiseBox" layoutX="20.0" layoutY="305.0" prefHeight="25.0" prefWidth="265.0" />
+      <Button layoutX="305.0" layoutY="305.0" mnemonicParsing="false" onAction="#handleAddButtonAction" prefHeight="25.0" prefWidth="125.0" text="Add parameter" />
+      <Accordion fx:id="accordion" layoutX="20.0" layoutY="77.0" prefHeight="212.0" prefWidth="411.0">
+        <panes>
+        </panes>
+      </Accordion>
+   </children>
+</AnchorPane>

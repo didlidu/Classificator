@@ -1,0 +1,13 @@
+com/bunjlabs/classificator/editor/ClassRow.class
+com/bunjlabs/classificator/editor/ClassEditorController$1.class
+com/bunjlabs/classificator/db/Flushable.class
+com/bunjlabs/classificator/MainController.class
+com/bunjlabs/classificator/editor/ClassEditorController$CharacteristicField.class
+com/bunjlabs/classificator/db/Characteristic$Range.class
+com/bunjlabs/classificator/db/Database$1.class
+com/bunjlabs/classificator/MainApp.class
+com/bunjlabs/classificator/db/Characteristic.class
+com/bunjlabs/classificator/editor/ClassEditorController.class
+com/bunjlabs/classificator/db/ClassDAO.class
+com/bunjlabs/classificator/db/Database.class
+com/bunjlabs/classificator/db/Characteristic$Type.class
