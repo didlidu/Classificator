@@ -174,7 +174,7 @@ public class ClassEditorController implements Initializable {
         }
         classDAO.flush();
         mainController.data.add(new ClassRow(className, map.toString()));
-        mainController.refreshTable();
+        //mainController.refreshTable();
         Database.getInstance().flush();
         Stage stage = (Stage) characteristicsChoiseBox.getScene().getWindow();
         stage.close();

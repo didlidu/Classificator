@@ -34,6 +34,7 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         classNameColumn.setCellValueFactory(new PropertyValueFactory<ClassRow, String>("classProperty"));
         classDescriptionColumn.setCellValueFactory(new PropertyValueFactory<ClassRow, String>("description"));
+        classesTable.setItems(data);
     }
     
     @FXML

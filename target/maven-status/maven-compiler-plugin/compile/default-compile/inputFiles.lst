@@ -1,8 +1,8 @@
-/home/user/workspace/BacteriaClassificator/src/main/java/com/bunjlabs/classificator/db/ClassDAO.java
-/home/user/workspace/BacteriaClassificator/src/main/java/com/bunjlabs/classificator/db/Characteristic.java
-/home/user/workspace/BacteriaClassificator/src/main/java/com/bunjlabs/classificator/editor/ClassRow.java
-/home/user/workspace/BacteriaClassificator/src/main/java/com/bunjlabs/classificator/db/Flushable.java
-/home/user/workspace/BacteriaClassificator/src/main/java/com/bunjlabs/classificator/db/Database.java
-/home/user/workspace/BacteriaClassificator/src/main/java/com/bunjlabs/classificator/MainController.java
-/home/user/workspace/BacteriaClassificator/src/main/java/com/bunjlabs/classificator/MainApp.java
-/home/user/workspace/BacteriaClassificator/src/main/java/com/bunjlabs/classificator/editor/ClassEditorController.java
+/home/user/workspace/Classificator/src/main/java/com/bunjlabs/classificator/db/Flushable.java
+/home/user/workspace/Classificator/src/main/java/com/bunjlabs/classificator/db/ClassDAO.java
+/home/user/workspace/Classificator/src/main/java/com/bunjlabs/classificator/MainApp.java
+/home/user/workspace/Classificator/src/main/java/com/bunjlabs/classificator/editor/ClassRow.java
+/home/user/workspace/Classificator/src/main/java/com/bunjlabs/classificator/editor/ClassEditorController.java
+/home/user/workspace/Classificator/src/main/java/com/bunjlabs/classificator/MainController.java
+/home/user/workspace/Classificator/src/main/java/com/bunjlabs/classificator/db/Characteristic.java
+/home/user/workspace/Classificator/src/main/java/com/bunjlabs/classificator/db/Database.java
