@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="335.0" prefWidth="321.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.bunjlabs.classificator.editor.CharacteristicEditorController">
+   <children>
+      <Label layoutX="14.0" layoutY="30.0" text="Name" />
+      <TextField fx:id="characteristicNameField" layoutX="62.0" layoutY="25.0" prefHeight="25.0" prefWidth="238.0" />
+      <Label layoutX="18.0" layoutY="69.0" text="Type" />
+      <ComboBox fx:id="characteristicTypeCombo" layoutX="62.0" layoutY="64.0" prefHeight="25.0" prefWidth="238.0" />
+      <TextArea fx:id="characteristicRangeArea" layoutX="62.0" layoutY="100.0" prefHeight="183.0" prefWidth="238.0" />
+      <Label layoutX="16.0" layoutY="107.0" text="Range" />
+      <Button onAction="#handleSaveButtonAction" layoutX="250.0" layoutY="298.0" mnemonicParsing="false" text="Save" />
+      <Button onAction="#handleCancelButtonAction"  cancelButton="true" layoutX="181.0" layoutY="298.0" mnemonicParsing="false" text="Cancel" />
+   </children>
+</AnchorPane>

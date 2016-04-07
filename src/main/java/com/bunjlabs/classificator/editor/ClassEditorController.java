@@ -81,11 +81,9 @@ public class ClassEditorController implements Initializable {
 
     private List<PossibleCharacteristics.CharacteristicField> characteristicsFields = new ArrayList<>();
 
-    private Map<String, Characteristic.Range> characteristicsRange = PossibleCharacteristics.getCharacteristicsRange();
-    private Map<String, Characteristic.Type> characteristicsType = PossibleCharacteristics.getCharacteristicsType();
 
     private ObservableList<String> characteristicsData
-            = FXCollections.observableArrayList(characteristicsType.keySet());
+            = FXCollections.observableArrayList(PossibleCharacteristics.getInstance().getMap().keySet());
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -103,12 +101,13 @@ public class ClassEditorController implements Initializable {
             case NAME:
                 control = new ChoiceBox<String>();
                 ((ChoiceBox<String>) control).setItems(
-                        FXCollections.observableArrayList(characteristicsRange.get(characteristicName).names));
+                        FXCollections.observableArrayList(
+                                PossibleCharacteristics.getInstance().findByName(characteristicName).range.names));
                 grid.add(control, 0, 0);
                 break;
             case NAME_SET:
                 control = new CheckComboBox<String>(FXCollections.observableArrayList(
-                        characteristicsRange.get(characteristicName).names));
+                        PossibleCharacteristics.getInstance().findByName(characteristicName).range.names));
                 grid.add(control, 0, 0);
                 break;
             case NUMBER:
@@ -133,7 +132,7 @@ public class ClassEditorController implements Initializable {
         if (characteristicName == null) {
             return;
         }
-        Characteristic.Type type = characteristicsType.get(characteristicName);
+        Characteristic.Type type =  PossibleCharacteristics.getInstance().findByName(characteristicName).type;
         characteristicsData.remove(characteristicName);
         addPaneToAccordion(type, characteristicName);
     }
@@ -147,24 +146,28 @@ public class ClassEditorController implements Initializable {
     @FXML
     public void handleSaveButtonAction(ActionEvent event) {
         String className = classNameField.getText();
+        if (Database.getInstance().findByName(className) != null) {
+            WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Class already exists");
+            return;
+        }
         if (className.isEmpty()) {
-            WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "Class name is empty");
+            WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Class name is empty");
             return;
         }
         if (characteristicsFields.isEmpty()) {
-            WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "Cannot save instance with no parameters");
+            WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Cannot save instance with no parameters");
             return;
         }
         Map<String, Characteristic> map = new HashMap<>();
         ClassDAO classDAO = new ClassDAO(className, map);
         for (PossibleCharacteristics.CharacteristicField field : characteristicsFields) {
-            Characteristic.Type type = characteristicsType.get(field.name);
-            Characteristic.Range range = characteristicsRange.get(field.name);
+            Characteristic.Type type = PossibleCharacteristics.getInstance().findByName(field.name).type;
+            Characteristic.Range range = PossibleCharacteristics.getInstance().findByName(field.name).range;
             switch (type) {
                 case NAME:
                     String selected = (String) ((ChoiceBox<String>) field.control).getSelectionModel().getSelectedItem();
                     if (selected == null) {
-                        WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "ChoiseBox item is not selected");
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "ChoiseBox item is not selected");
                         return;
                     }
                     map.put(field.name, new Characteristic(selected));
@@ -172,7 +175,7 @@ public class ClassEditorController implements Initializable {
                 case NAME_SET:
                     List<String> checked = ((CheckComboBox<String>) field.control).getCheckModel().getCheckedItems();
                     if (checked == null || checked.isEmpty()) {
-                        WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "CheckComboBox item is not selected");
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "CheckComboBox item is not selected");
                         return;
                     }
                     map.put(field.name, new Characteristic(checked));
@@ -182,7 +185,12 @@ public class ClassEditorController implements Initializable {
                     try {
                         number = Double.parseDouble(((TextField) field.control).getText());
                     } catch (NumberFormatException ex) {
-                        WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "Not a number in TextField");
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Not a number in TextField");
+                        return;
+                    }
+                    if (number <= range.from || number >= range.to) {
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance",
+                                "Number of parameter '" + field.name + "' is not in range " + range);
                         return;
                     }
                     map.put(field.name, new Characteristic(number));
@@ -190,12 +198,19 @@ public class ClassEditorController implements Initializable {
                 case NUMBER_RANGE:
                     String[] numbers = ((TextField) field.control).getText().split("-");
                     try {
+                        double from = Double.parseDouble(numbers[0]);
+                        double to = Double.parseDouble(numbers[1]);
+                        if (from >= to || from <= range.from || to >= range.to) {
+                            WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance",
+                                    "Range of parameter '" + field.name + "' is not in range " + range + " or invalid");
+                            return;
+                        }
                         map.put(field.name, new Characteristic(
-                                Double.parseDouble(numbers[0]),
-                                Double.parseDouble(numbers[1])
+                                from,
+                                to
                         ));
                     } catch (NumberFormatException ex) {
-                        WindowBuilder.allert(Alert.AlertType.WARNING, "Cannot save instance", "Not a range in TextField");
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Not a range in TextField");
                         return;
                     }
                     break;
@@ -203,12 +218,12 @@ public class ClassEditorController implements Initializable {
         }
         classDAO.flush();
         mainController.addToTable(new ClassRow(className, map.toString()));
-        if (this.isEditing) mainController.refreshTable();
+        if (this.isEditing) {
+            mainController.refreshTable();
+        }
         Database.getInstance().flush();
         Stage stage = (Stage) characteristicsChoiseBox.getScene().getWindow();
         stage.close();
     }
-
-
 
 }

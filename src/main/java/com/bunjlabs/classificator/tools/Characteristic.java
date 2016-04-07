@@ -24,6 +24,13 @@ public class Characteristic {
         public Range(List<String> names) {
             this.names = names;
         }
+
+        @Override
+        public String toString() {
+            return "(" + from + ", " + to + ")";
+        }
+        
+        
     }
 
     private Type type;
