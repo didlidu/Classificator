@@ -4,11 +4,10 @@ import com.bunjlabs.classificator.MainController;
 import com.bunjlabs.classificator.tools.Characteristic;
 import com.bunjlabs.classificator.db.ClassDAO;
 import com.bunjlabs.classificator.db.Database;
-import com.bunjlabs.classificator.tools.PossibleCharacteristics;
+import com.bunjlabs.classificator.db.PossibleCharacteristics;
 import com.bunjlabs.classificator.tools.WindowBuilder;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +80,6 @@ public class ClassEditorController implements Initializable {
 
     private List<PossibleCharacteristics.CharacteristicField> characteristicsFields = new ArrayList<>();
 
-
     private ObservableList<String> characteristicsData
             = FXCollections.observableArrayList(PossibleCharacteristics.getInstance().getMap().keySet());
 
@@ -132,7 +130,7 @@ public class ClassEditorController implements Initializable {
         if (characteristicName == null) {
             return;
         }
-        Characteristic.Type type =  PossibleCharacteristics.getInstance().findByName(characteristicName).type;
+        Characteristic.Type type = PossibleCharacteristics.getInstance().findByName(characteristicName).type;
         characteristicsData.remove(characteristicName);
         addPaneToAccordion(type, characteristicName);
     }
@@ -146,7 +144,7 @@ public class ClassEditorController implements Initializable {
     @FXML
     public void handleSaveButtonAction(ActionEvent event) {
         String className = classNameField.getText();
-        if (Database.getInstance().findByName(className) != null) {
+        if (!this.isEditing && Database.getInstance().findByName(className) != null) {
             WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Class already exists");
             return;
         }

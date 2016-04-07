@@ -3,8 +3,8 @@ package com.bunjlabs.classificator.editor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-
 public class ClassRow {
+
     private StringProperty classProperty;
     private StringProperty description;
 
@@ -21,11 +21,11 @@ public class ClassRow {
     public String getClassProperty() {
         return classProperty.get();
     }
-    
+
     public String getDescription() {
         return description.get();
     }
-    
+
     public void setClassProperty(String classProperty) {
         this.classProperty.set(classProperty);
     }

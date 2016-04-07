@@ -1,12 +1,13 @@
 package com.bunjlabs.classificator;
 
-import com.bunjlabs.classificator.editor.CharacteristicRow;
 import com.bunjlabs.classificator.db.ClassDAO;
 import com.bunjlabs.classificator.db.Database;
+import com.bunjlabs.classificator.db.PossibleCharacteristics;
+import com.bunjlabs.classificator.editor.CharacteristicEditorController;
+import com.bunjlabs.classificator.editor.CharacteristicRow;
 import com.bunjlabs.classificator.editor.ClassEditorController;
 import com.bunjlabs.classificator.editor.ClassRow;
 import com.bunjlabs.classificator.tools.Characteristic;
-import com.bunjlabs.classificator.tools.PossibleCharacteristics;
 import com.bunjlabs.classificator.tools.Solver;
 import com.bunjlabs.classificator.tools.WindowBuilder;
 import java.io.IOException;
@@ -50,7 +51,7 @@ public class MainController implements Initializable {
     private TableView<ClassRow> classesTable;
     @FXML
     private Tab answerTab;
-    
+
     @FXML
     private TableView<CharacteristicRow> characteristicsTable;
     @FXML
@@ -59,13 +60,17 @@ public class MainController implements Initializable {
     private TableColumn<CharacteristicRow, String> characteristiDescriptionColumn;
     @FXML
     private TableColumn<CharacteristicRow, String> characteristiRangeColumn;
-    
+
     public ObservableList<CharacteristicRow> charData = PossibleCharacteristics.getInstance().getRowsForTableView();
 
     public ObservableList<ClassRow> data = Database.getInstance().getRowsForTableView();
 
     public void refreshTable() {
         classesTable.refresh();
+    }
+
+    public void refreshCharTable() {
+        characteristicsTable.refresh();
     }
 
     public void addToTable(ClassRow row) {
@@ -78,13 +83,23 @@ public class MainController implements Initializable {
         data.add(row);
     }
 
+    public void addToCharTable(CharacteristicRow row) {
+        for (int i = 0; i < charData.size(); i++) {
+            if (charData.get(i).getName().equals(row.getName())) {
+                charData.set(i, row);
+                return;
+            }
+        }
+        charData.add(row);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         classNameColumn.setCellValueFactory(new PropertyValueFactory<ClassRow, String>("classProperty"));
         classDescriptionColumn.setCellValueFactory(new PropertyValueFactory<ClassRow, String>("description"));
         classesTable.setItems(data);
         solverParamsChoiceBox.setItems(characteristicsData);
-        
+
         characteristicNameColumn.setCellValueFactory(new PropertyValueFactory<CharacteristicRow, String>("name"));
         characteristiDescriptionColumn.setCellValueFactory(new PropertyValueFactory<CharacteristicRow, String>("type"));
         characteristiRangeColumn.setCellValueFactory(new PropertyValueFactory<CharacteristicRow, String>("range"));
