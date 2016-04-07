@@ -102,7 +102,7 @@ public class PossibleCharacteristics {
                     new CharacteristicRow(
                             s,
                             rt.type.name(),
-                            rt.type == Characteristic.Type.NAME || rt.type == Characteristic.Type.NAME_SET ? rt.range.names.toString() :rt.range.toString()
+                            rt.type == Characteristic.Type.NAME || rt.type == Characteristic.Type.NAME_SET ? rt.range.names.toString() : rt.range.toString()
                     )
             );
         });

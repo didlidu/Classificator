@@ -75,7 +75,7 @@ public class CharacteristicEditorController implements Initializable {
         }
 
         PossibleCharacteristics.getInstance().add(charName, new PossibleCharacteristics.TypeRange(range, charType));
-        mainController.addToCharTable(new CharacteristicRow(charName, charType.toString(), 
+        mainController.addToCharTable(new CharacteristicRow(charName, charType.toString(),
                 charType == Characteristic.Type.NAME || charType == Characteristic.Type.NAME_SET ? range.names.toString() : range.toString()));
 
         PossibleCharacteristics.getInstance().flush();

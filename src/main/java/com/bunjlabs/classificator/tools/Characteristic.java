@@ -5,22 +5,24 @@ import java.util.List;
 public class Characteristic {
 
     public enum Type {
+
         NAME,
         NAME_SET,
         NUMBER,
         NUMBER_RANGE
     }
-    
+
     public static class Range {
+
         public double from;
         public double to;
         public List<String> names;
-        
+
         public Range(double from, double to) {
             this.from = from;
             this.to = to;
         }
-        
+
         public Range(List<String> names) {
             this.names = names;
         }
@@ -29,8 +31,7 @@ public class Characteristic {
         public String toString() {
             return "(" + from + ", " + to + ")";
         }
-        
-        
+
     }
 
     private Type type;
@@ -77,7 +78,7 @@ public class Characteristic {
         }
         return nameSet;
     }
-    
+
     public double getNumber() {
         if (type != Type.NUMBER) {
             throw new ClassCastException("Characteristic type is not NUMBER");
@@ -98,7 +99,7 @@ public class Characteristic {
         }
         return numberTo;
     }
-    
+
     @Override
     public String toString() {
         switch (type) {

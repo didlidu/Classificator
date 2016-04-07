@@ -1,6 +1,5 @@
 package com.bunjlabs.classificator.db;
 
-
 import com.bunjlabs.classificator.editor.ClassRow;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

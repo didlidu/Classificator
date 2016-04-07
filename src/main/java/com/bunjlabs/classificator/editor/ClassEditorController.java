@@ -81,7 +81,6 @@ public class ClassEditorController implements Initializable {
 
     private List<PossibleCharacteristics.CharacteristicField> characteristicsFields = new ArrayList<>();
 
-
     private ObservableList<String> characteristicsData
             = FXCollections.observableArrayList(PossibleCharacteristics.getInstance().getMap().keySet());
 
@@ -132,7 +131,7 @@ public class ClassEditorController implements Initializable {
         if (characteristicName == null) {
             return;
         }
-        Characteristic.Type type =  PossibleCharacteristics.getInstance().findByName(characteristicName).type;
+        Characteristic.Type type = PossibleCharacteristics.getInstance().findByName(characteristicName).type;
         characteristicsData.remove(characteristicName);
         addPaneToAccordion(type, characteristicName);
     }
