@@ -4,7 +4,7 @@ import com.bunjlabs.classificator.MainController;
 import com.bunjlabs.classificator.tools.Characteristic;
 import com.bunjlabs.classificator.db.ClassDAO;
 import com.bunjlabs.classificator.db.Database;
-import com.bunjlabs.classificator.tools.PossibleCharacteristics;
+import com.bunjlabs.classificator.db.PossibleCharacteristics;
 import com.bunjlabs.classificator.tools.WindowBuilder;
 import java.net.URL;
 import java.util.ArrayList;
@@ -146,7 +146,7 @@ public class ClassEditorController implements Initializable {
     @FXML
     public void handleSaveButtonAction(ActionEvent event) {
         String className = classNameField.getText();
-        if (Database.getInstance().findByName(className) != null) {
+        if (!this.isEditing && Database.getInstance().findByName(className) != null) {
             WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Class already exists");
             return;
         }

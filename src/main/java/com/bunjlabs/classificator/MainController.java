@@ -3,10 +3,11 @@ package com.bunjlabs.classificator;
 import com.bunjlabs.classificator.editor.CharacteristicRow;
 import com.bunjlabs.classificator.db.ClassDAO;
 import com.bunjlabs.classificator.db.Database;
+import com.bunjlabs.classificator.editor.CharacteristicEditorController;
 import com.bunjlabs.classificator.editor.ClassEditorController;
 import com.bunjlabs.classificator.editor.ClassRow;
 import com.bunjlabs.classificator.tools.Characteristic;
-import com.bunjlabs.classificator.tools.PossibleCharacteristics;
+import com.bunjlabs.classificator.db.PossibleCharacteristics;
 import com.bunjlabs.classificator.tools.Solver;
 import com.bunjlabs.classificator.tools.WindowBuilder;
 import java.io.IOException;
@@ -67,6 +68,10 @@ public class MainController implements Initializable {
     public void refreshTable() {
         classesTable.refresh();
     }
+    
+    public void refreshCharTable() {
+        characteristicsTable.refresh();
+    }
 
     public void addToTable(ClassRow row) {
         for (int i = 0; i < data.size(); i++) {
@@ -76,6 +81,16 @@ public class MainController implements Initializable {
             }
         }
         data.add(row);
+    }
+    
+    public void addToCharTable(CharacteristicRow row) {
+        for (int i = 0; i < charData.size(); i++) {
+            if (charData.get(i).getName().equals(row.getName())) {
+                charData.set(i, row);
+                return;
+            }
+        }
+        charData.add(row);
     }
 
     @Override

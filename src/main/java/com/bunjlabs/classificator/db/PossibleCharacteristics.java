@@ -1,8 +1,7 @@
-package com.bunjlabs.classificator.tools;
+package com.bunjlabs.classificator.db;
 
-import com.bunjlabs.classificator.db.ClassDAO;
 import com.bunjlabs.classificator.editor.CharacteristicRow;
-import com.bunjlabs.classificator.editor.ClassRow;
+import com.bunjlabs.classificator.tools.Characteristic;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
@@ -12,11 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -107,26 +102,25 @@ public class PossibleCharacteristics {
                     new CharacteristicRow(
                             s,
                             rt.type.name(),
-                            rt.range.toString()
+                            rt.type == Characteristic.Type.NAME || rt.type == Characteristic.Type.NAME_SET ? rt.range.names.toString() :rt.range.toString()
                     )
             );
         });
         return data;
     }
-    
+
     public Map<String, TypeRange> getMap() {
         return this.list;
     }
 
     /*static {
-        List<String> list = Arrays.asList("a", "b", "c");
+     List<String> list = Arrays.asList("a", "b", "c");
 
-        characteristicsType.put("param a", Characteristic.Type.NAME_SET);
-        characteristicsRange.put("param a", new Characteristic.Range(list));
-        characteristicsType.put("param b", Characteristic.Type.NUMBER_RANGE);
-        characteristicsRange.put("param b", new Characteristic.Range(0, 100));
-    }*/
-
+     characteristicsType.put("param a", Characteristic.Type.NAME_SET);
+     characteristicsRange.put("param a", new Characteristic.Range(list));
+     characteristicsType.put("param b", Characteristic.Type.NUMBER_RANGE);
+     characteristicsRange.put("param b", new Characteristic.Range(0, 100));
+     }*/
     public static PossibleCharacteristics getInstance() {
         return (instance == null) ? instance = new PossibleCharacteristics() : instance;
     }

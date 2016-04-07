@@ -1,1 +1,1 @@
-[]
+[{"name":"Whatever","characteristics":{"ParamBool":{"type":"NAME","name":"Yes","numberFrom":0.0,"numberTo":0.0},"ParamNumber":{"type":"NUMBER","numberFrom":10.0,"numberTo":10.0}}},{"name":"Another Whatever","characteristics":{"ParamBool":{"type":"NAME","name":" No","numberFrom":0.0,"numberTo":0.0},"ParamNumberRange":{"type":"NUMBER_RANGE","numberFrom":20.0,"numberTo":80.0}}}]
