@@ -31,6 +31,8 @@ import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 
 public class ClassEditorController implements Initializable {
+    
+    public static final double EPS = 0.0000001;
 
     @FXML
     private TextField classNameField;
@@ -133,6 +135,7 @@ public class ClassEditorController implements Initializable {
         Characteristic.Type type = PossibleCharacteristics.getInstance().findByName(characteristicName).type;
         characteristicsData.remove(characteristicName);
         addPaneToAccordion(type, characteristicName);
+        characteristicsChoiseBox.getSelectionModel().select(null);
     }
 
     @FXML
@@ -186,7 +189,7 @@ public class ClassEditorController implements Initializable {
                         WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Not a number in TextField");
                         return;
                     }
-                    if (number <= range.from || number >= range.to) {
+                    if (number + EPS <= range.from || number - EPS >= range.to) {
                         WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance",
                                 "Number of parameter '" + field.name + "' is not in range " + range);
                         return;
@@ -198,7 +201,7 @@ public class ClassEditorController implements Initializable {
                     try {
                         double from = Double.parseDouble(numbers[0]);
                         double to = Double.parseDouble(numbers[1]);
-                        if (from >= to || from <= range.from || to >= range.to) {
+                        if (from >= to || from + EPS <= range.from || to - EPS >= range.to) {
                             WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance",
                                     "Range of parameter '" + field.name + "' is not in range " + range + " or invalid");
                             return;

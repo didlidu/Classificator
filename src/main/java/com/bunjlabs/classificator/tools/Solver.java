@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Solver {
+    
+    public static final double EPS = 0.0000001;
 
     public static String solve(ClassDAO object) {
         List<ClassDAO> list = (List<ClassDAO>) Database.getInstance().getList();
@@ -62,7 +64,7 @@ public class Solver {
                 }
                 return true;
             case NUMBER:
-                return object.getNumber() == clazz.getNumber();
+                return Math.abs(object.getNumber() - clazz.getNumber()) < EPS;
             case NUMBER_RANGE:
                 return object.getNumberFrom() >= clazz.getNumberFrom() && object.getNumberTo() <= clazz.getNumberTo();
         }
