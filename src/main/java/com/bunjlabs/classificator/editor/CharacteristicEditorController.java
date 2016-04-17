@@ -76,6 +76,7 @@ public class CharacteristicEditorController implements Initializable {
         mainController.addToCharTable(new CharacteristicRow(charName, charType.toString(),
                 charType == Characteristic.Type.NAME || charType == Characteristic.Type.NAME_SET ? range.names.toString() : range.toString()));
 
+        mainController.refreshSolverParamsChoiceBox();
         PossibleCharacteristics.getInstance().flush();
 
         Stage stage = (Stage) characteristicNameField.getScene().getWindow();
@@ -97,4 +98,5 @@ public class CharacteristicEditorController implements Initializable {
                 Characteristic.Type.NUMBER_RANGE
         ));
     }
+    
 }

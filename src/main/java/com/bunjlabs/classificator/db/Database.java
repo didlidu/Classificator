@@ -104,4 +104,10 @@ public class Database {
     public Collection<ClassDAO> getList() {
         return list;
     }
+
+    public void removeByCharacteristicName(String name) {
+        getList().removeIf((el) -> {
+            return el.getCharacteristics().containsKey(name);
+        });
+    }
 }

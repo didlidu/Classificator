@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +29,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Tab;
@@ -71,6 +73,11 @@ public class MainController implements Initializable {
 
     public void refreshCharTable() {
         characteristicsTable.refresh();
+    }
+
+    public void refreshSolverParamsChoiceBox() {
+        solverParamsChoiceBox.setItems(
+                characteristicsData = FXCollections.observableArrayList(PossibleCharacteristics.getInstance().getMap().keySet()));
     }
 
     public void addToTable(ClassRow row) {
@@ -325,12 +332,24 @@ public class MainController implements Initializable {
 
     @FXML
     public void handleDeleteChButtonAction(ActionEvent event) {
-        CharacteristicRow row = characteristicsTable.getSelectionModel().getSelectedItem();
-        if (row == null) {
-            return;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation dialog");
+        alert.setHeaderText("Are you shure want to delete this characteristic?");
+        alert.setContentText("That action will remove all knowlages that uses this characteristic.");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            CharacteristicRow row = characteristicsTable.getSelectionModel().getSelectedItem();
+            if (row == null) {
+                return;
+            }
+            this.charData.remove(row);
+            PossibleCharacteristics.getInstance().removeByName(row.getName());
+            PossibleCharacteristics.getInstance().flush();
+            Database.getInstance().removeByCharacteristicName(row.getName());
+            Database.getInstance().flush();
+            classesTable.setItems(data = Database.getInstance().getRowsForTableView());
+            this.refreshSolverParamsChoiceBox();
         }
-        this.charData.remove(row);
-        PossibleCharacteristics.getInstance().removeByName(row.getName());
-        PossibleCharacteristics.getInstance().flush();
     }
+    
 }
