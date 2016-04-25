@@ -8,6 +8,7 @@ import com.bunjlabs.classificator.editor.CharacteristicRow;
 import com.bunjlabs.classificator.editor.ClassEditorController;
 import com.bunjlabs.classificator.editor.ClassRow;
 import com.bunjlabs.classificator.tools.Characteristic;
+import com.bunjlabs.classificator.tools.Loginer;
 import com.bunjlabs.classificator.tools.Solver;
 import com.bunjlabs.classificator.tools.WindowBuilder;
 import java.io.IOException;
@@ -55,6 +56,11 @@ public class MainController implements Initializable {
     private Tab answerTab;
 
     @FXML
+    public Tab knowlagesTab;
+    @FXML
+    public Tab characteristicsTab;
+
+    @FXML
     private TableView<CharacteristicRow> characteristicsTable;
     @FXML
     private TableColumn<CharacteristicRow, String> characteristicNameColumn;
@@ -66,6 +72,13 @@ public class MainController implements Initializable {
     public ObservableList<CharacteristicRow> charData = PossibleCharacteristics.getInstance().getRowsForTableView();
 
     public ObservableList<ClassRow> data = Database.getInstance().getRowsForTableView();
+
+    public void setAccessLevel(Loginer.AccessLevel accessLevel) {
+        if (accessLevel == Loginer.AccessLevel.ADMIN) {
+            knowlagesTab.setDisable(false);
+            characteristicsTab.setDisable(false);
+        }
+    }
 
     public void refreshTable() {
         classesTable.refresh();
@@ -263,29 +276,33 @@ public class MainController implements Initializable {
         grid.setVgap(4);
         grid.setPadding(new Insets(5, 5, 5, 5));
         Control control = null;
+        Characteristic.Range range = PossibleCharacteristics.getInstance().findByName(characteristicName).range;
         switch (type) {
             case NAME:
                 control = new ChoiceBox<String>();
                 ((ChoiceBox<String>) control).setItems(
                         FXCollections.observableArrayList(PossibleCharacteristics.getInstance().findByName(characteristicName).range.names));
                 grid.add(control, 0, 0);
+                gridTitlePane.setText(characteristicName + " Name");
                 break;
             case NAME_SET:
                 control = new CheckComboBox<String>(FXCollections.observableArrayList(
                         PossibleCharacteristics.getInstance().findByName(characteristicName).range.names));
                 grid.add(control, 0, 0);
+                gridTitlePane.setText(characteristicName + " Name set");
                 break;
             case NUMBER:
                 control = new TextField();
                 grid.add(control, 0, 0);
+                gridTitlePane.setText(characteristicName + " Number: [" + range.from + ", " + range.to + "]");
                 break;
             case NUMBER_RANGE:
                 control = new TextField();
                 grid.add(control, 0, 0);
+                gridTitlePane.setText(characteristicName + " Number Range [" + range.from + ", " + range.to + "]");
                 break;
         }
         characteristicsFields.add(new PossibleCharacteristics.CharacteristicField(control, characteristicName));
-        gridTitlePane.setText(characteristicName);
         gridTitlePane.setContent(grid);
         solverAccordion.getPanes().add(gridTitlePane);
         return control;
@@ -351,5 +368,5 @@ public class MainController implements Initializable {
             this.refreshSolverParamsChoiceBox();
         }
     }
-    
+
 }

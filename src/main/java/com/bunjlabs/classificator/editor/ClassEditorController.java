@@ -97,6 +97,7 @@ public class ClassEditorController implements Initializable {
         grid.setVgap(4);
         grid.setPadding(new Insets(5, 5, 5, 5));
         Control control = null;
+        Characteristic.Range range = PossibleCharacteristics.getInstance().findByName(characteristicName).range;
         switch (type) {
             case NAME:
                 control = new ChoiceBox<String>();
@@ -104,23 +105,26 @@ public class ClassEditorController implements Initializable {
                         FXCollections.observableArrayList(
                                 PossibleCharacteristics.getInstance().findByName(characteristicName).range.names));
                 grid.add(control, 0, 0);
+                gridTitlePane.setText(characteristicName + " Name");
                 break;
             case NAME_SET:
                 control = new CheckComboBox<String>(FXCollections.observableArrayList(
                         PossibleCharacteristics.getInstance().findByName(characteristicName).range.names));
                 grid.add(control, 0, 0);
+                gridTitlePane.setText(characteristicName + " Name set");
                 break;
             case NUMBER:
                 control = new TextField();
                 grid.add(control, 0, 0);
+                gridTitlePane.setText(characteristicName + " Number: [" + range.from + ", " + range.to + "]");
                 break;
             case NUMBER_RANGE:
                 control = new TextField();
                 grid.add(control, 0, 0);
+                gridTitlePane.setText(characteristicName + " Number Range [" + range.from + ", " + range.to + "]");
                 break;
         }
         characteristicsFields.add(new PossibleCharacteristics.CharacteristicField(control, characteristicName));
-        gridTitlePane.setText(characteristicName);
         gridTitlePane.setContent(grid);
         accordion.getPanes().add(gridTitlePane);
         return control;

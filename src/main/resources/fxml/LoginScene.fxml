@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="170.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bunjlabs.classificator.LoginSceneController">
+   <children>
+      <Button layoutX="257.0" layoutY="120.0" mnemonicParsing="false" onAction="#handleLoginButtonAction" prefHeight="25.0" prefWidth="112.0" text="Login" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="120.0" />
+      <TextField fx:id="loginField" layoutX="31.0" layoutY="25.0" prefHeight="25.0" prefWidth="338.0" promptText="Login" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="31.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="25.0" />
+      <PasswordField fx:id="passwordField" layoutX="31.0" layoutY="73.0" prefHeight="25.0" prefWidth="338.0" promptText="Password" />
+   </children>
+</AnchorPane>

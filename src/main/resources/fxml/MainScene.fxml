@@ -10,7 +10,7 @@
     <children>
         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
-                <Tab closable="false" text="Knowlages Editor">
+                <Tab fx:id="knowlagesTab" closable="false" disable="true" text="Knowlages Editor">
                     <content>
                         <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
                             <children>
@@ -27,7 +27,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Characteristics editor">
+                <Tab fx:id="characteristicsTab" disable="true" text="Characteristics editor">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
