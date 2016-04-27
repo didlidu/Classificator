@@ -30,7 +30,14 @@ public class CharacteristicEditorController implements Initializable {
 
     @FXML
     public void handleSaveButtonAction(ActionEvent ae) {
+
         String charName = characteristicNameField.getText();
+
+        if (PossibleCharacteristics.getInstance().getMap().containsKey(charName)) {
+            WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Characteristic already exists");
+            return;
+        }
+
         Characteristic.Type charType = (Characteristic.Type) characteristicTypeCombo.getSelectionModel().getSelectedItem();
         String charRange = characteristicRangeArea.getText();
 
@@ -98,5 +105,5 @@ public class CharacteristicEditorController implements Initializable {
                 Characteristic.Type.NUMBER_RANGE
         ));
     }
-    
+
 }
