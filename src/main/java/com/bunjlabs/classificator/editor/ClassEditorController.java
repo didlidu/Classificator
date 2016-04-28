@@ -31,7 +31,7 @@ import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 
 public class ClassEditorController implements Initializable {
-    
+
     public static final double EPS = 0.0000001;
 
     @FXML
@@ -204,8 +204,13 @@ public class ClassEditorController implements Initializable {
                     String[] numbers = ((TextField) field.control).getText().split("-");
                     try {
                         double from = Double.parseDouble(numbers[0]);
-                        double to = Double.parseDouble(numbers[1]);
-                        if (from >= to || from + EPS <= range.from || to - EPS >= range.to) {
+                        double to;
+                        if (numbers.length < 2) {
+                            to = from;
+                        } else {
+                            to = Double.parseDouble(numbers[1]);
+                        }
+                        if (from > to || from + EPS < range.from || to - EPS > range.to) {
                             WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance",
                                     "Range of parameter '" + field.name + "' is not in range " + range + " or invalid");
                             return;

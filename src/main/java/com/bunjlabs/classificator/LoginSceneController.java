@@ -47,7 +47,7 @@ public class LoginSceneController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Bacteria Classificator");
             stage.setScene(new Scene(root));
-            stage.setResizable(false);
+            //stage.setResizable(false);
             stage.show();
 
             Stage ourStage = (Stage) loginField.getScene().getWindow();

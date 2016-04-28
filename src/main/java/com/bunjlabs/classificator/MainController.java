@@ -321,6 +321,7 @@ public class MainController implements Initializable {
 
     private void solve(ClassDAO object) {
         solverAccordion.getPanes().clear();
+        characteristicsFields.clear();
         objectNameField.clear();
         characteristicsData = FXCollections.observableArrayList(PossibleCharacteristics.getInstance().getMap().keySet());
         solverParamsChoiceBox.setItems(characteristicsData);
@@ -338,7 +339,7 @@ public class MainController implements Initializable {
             CharacteristicEditorController controller = fXMLLoader.getController();
             controller.mainController = this;
             Stage stage = new Stage();
-            stage.setTitle("New Class");
+            stage.setTitle("New Characteristic");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
