@@ -56,5 +56,27 @@ public class LoginSceneController implements Initializable {
             e.printStackTrace();
         }
     }
+    
+    @FXML
+    private void handleLoginAsUserButtonAction(ActionEvent event) {
+        Parent root;
+        try {
+            Loginer.AccessLevel level = Loginer.AccessLevel.USER;
+            FXMLLoader fXMLLoader = new FXMLLoader();
+            root = fXMLLoader.load(getClass().getResource("/fxml/MainScene.fxml").openStream());
+            MainController controller = fXMLLoader.getController();
+            controller.setAccessLevel(level);
+            Stage stage = new Stage();
+            stage.setTitle("Bacteria Classificator");
+            stage.setScene(new Scene(root));
+            //stage.setResizable(false);
+            stage.show();
+
+            Stage ourStage = (Stage) loginField.getScene().getWindow();
+            ourStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

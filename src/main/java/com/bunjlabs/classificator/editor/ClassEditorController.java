@@ -126,7 +126,9 @@ public class ClassEditorController implements Initializable {
         }
         characteristicsFields.add(new PossibleCharacteristics.CharacteristicField(control, characteristicName));
         gridTitlePane.setContent(grid);
+        //accordion.expandedPaneProperty();
         accordion.getPanes().add(gridTitlePane);
+        gridTitlePane.setExpanded(true);
         return control;
     }
 
@@ -172,7 +174,7 @@ public class ClassEditorController implements Initializable {
                 case NAME:
                     String selected = (String) ((ChoiceBox<String>) field.control).getSelectionModel().getSelectedItem();
                     if (selected == null) {
-                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "ChoiseBox item is not selected");
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Item is not selected in " + field.name);
                         return;
                     }
                     map.put(field.name, new Characteristic(selected));
@@ -180,7 +182,7 @@ public class ClassEditorController implements Initializable {
                 case NAME_SET:
                     List<String> checked = ((CheckComboBox<String>) field.control).getCheckModel().getCheckedItems();
                     if (checked == null || checked.isEmpty()) {
-                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "CheckComboBox item is not selected");
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Item is not selected in " + field.name);
                         return;
                     }
                     map.put(field.name, new Characteristic(checked));
@@ -190,7 +192,7 @@ public class ClassEditorController implements Initializable {
                     try {
                         number = Double.parseDouble(((TextField) field.control).getText());
                     } catch (NumberFormatException ex) {
-                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Not a number in TextField");
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Not a number in " + field.name);
                         return;
                     }
                     if (number + EPS <= range.from || number - EPS >= range.to) {
@@ -220,7 +222,7 @@ public class ClassEditorController implements Initializable {
                                 to
                         ));
                     } catch (NumberFormatException ex) {
-                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Not a range in TextField");
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot save instance", "Not a range in " + field.name);
                         return;
                     }
                     break;

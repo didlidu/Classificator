@@ -33,7 +33,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -56,9 +58,12 @@ public class MainController implements Initializable {
     private Tab answerTab;
 
     @FXML
+    public TabPane tabPane;
+    @FXML
     public Tab knowlagesTab;
     @FXML
     public Tab characteristicsTab;
+    
 
     @FXML
     private TableView<CharacteristicRow> characteristicsTable;
@@ -212,7 +217,7 @@ public class MainController implements Initializable {
                 case NAME:
                     String selected = (String) ((ChoiceBox<String>) field.control).getSelectionModel().getSelectedItem();
                     if (selected == null) {
-                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot solve", "ChoiseBox item is not selected");
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot solve", "Item is not selected in " + field.name);
                         return;
                     }
                     map.put(field.name, new Characteristic(selected));
@@ -220,7 +225,7 @@ public class MainController implements Initializable {
                 case NAME_SET:
                     List<String> checked = ((CheckComboBox<String>) field.control).getCheckModel().getCheckedItems();
                     if (checked == null || checked.isEmpty()) {
-                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot solve", "CheckComboBox items are not selected");
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot solve", "Items are not selected in " + field.name);
                         return;
                     }
                     map.put(field.name, new Characteristic(checked));
@@ -230,7 +235,7 @@ public class MainController implements Initializable {
                     try {
                         number = Double.parseDouble(((TextField) field.control).getText());
                     } catch (NumberFormatException ex) {
-                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot solve", "Not a number in TextField");
+                        WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot solve", "Not a number in " + field.name);
                         return;
                     }
                     if (number < range.from || number > range.to) {
@@ -260,7 +265,7 @@ public class MainController implements Initializable {
                                     to
                             ));
                         } catch (NumberFormatException e) {
-                            WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot solve", "Not a range in TextField");
+                            WindowBuilder.alert(Alert.AlertType.WARNING, "Cannot solve", "Not a range in " + field.name);
                             return;
                         }
                     }
@@ -268,6 +273,7 @@ public class MainController implements Initializable {
             }
         }
         solve(object);
+        tabPane.getSelectionModel().select(answerTab);
     }
 
     private Control addPaneToAccordion(Characteristic.Type type, String characteristicName) {
@@ -305,6 +311,7 @@ public class MainController implements Initializable {
         characteristicsFields.add(new PossibleCharacteristics.CharacteristicField(control, characteristicName));
         gridTitlePane.setContent(grid);
         solverAccordion.getPanes().add(gridTitlePane);
+        gridTitlePane.setExpanded(true);
         return control;
     }
 
