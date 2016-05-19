@@ -37,35 +37,37 @@ public class Solver {
         StringBuilder sb = new StringBuilder();
         sb.append("Classification of object '");
         sb.append(object.getName());
-        sb.append("' with characteristics:\n\n");
+        sb.append("' with characteristics:\n");
         sb.append(object.getCharacteristics().toString());
         sb.append("\n\n");
+
         if (matches.isEmpty()) {
-            sb.append("No classes was found for current object");
+            sb.append("No classes was found for the current object (no one characteristics was matched).");
         } else {
+
+            sb.append("Classes that not matches:\n");
+            unmatches.forEach((clazz) -> {
+                sb.append("  * '").append(clazz.getName()).append("' with characteristics:").append("\n");
+
+                sb.append("    - '").append(clazz.getCharacteristics().toString()).append("\n");
+            });
+            sb.append("\n\n");
+
             sb.append("Classes that matches the current object:\n");
 
             matches.forEach((clazz, charslist) -> {
                 sb.append("Class '").append(clazz.getName());
                 sb.append("' with characteristics:\n");
                 sb.append("\t\t").append(clazz.getCharacteristics().toString()).append("\n");
-                sb.append(" Matched charactersictics:");
+                //sb.append(" Matched charactersictics:");
 
-                charslist.forEach((ch) -> {
-                    sb.append("   ").append(ch).append("\n");
-                });
+                //charslist.forEach((ch) -> {
+                //    sb.append("   ").append(ch).append("\n");
+                //});
             });
         }
         sb.append("\n\n");
 
-        sb.append("Characteristics that not matches:\n");
-        unmatches.forEach((clazz) -> {
-            sb.append("  * '").append(clazz.getName()).append("' with characteristics:").append("\n");
-            
-            sb.append(clazz.getCharacteristics().toString()).append("\n");
-        });
-        sb.append("\n\n");
-        
         return sb.toString();
     }
 
