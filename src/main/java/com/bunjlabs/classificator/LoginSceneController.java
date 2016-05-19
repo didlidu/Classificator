@@ -45,7 +45,7 @@ public class LoginSceneController implements Initializable {
             MainController controller = fXMLLoader.getController();
             controller.setAccessLevel(level);
             Stage stage = new Stage();
-            stage.setTitle("Bacteria Classificator");
+            stage.setTitle("Classificator");
             stage.setScene(new Scene(root));
             //stage.setResizable(false);
             stage.show();
@@ -67,7 +67,7 @@ public class LoginSceneController implements Initializable {
             MainController controller = fXMLLoader.getController();
             controller.setAccessLevel(level);
             Stage stage = new Stage();
-            stage.setTitle("Bacteria Classificator");
+            stage.setTitle("Classificator");
             stage.setScene(new Scene(root));
             //stage.setResizable(false);
             stage.show();
